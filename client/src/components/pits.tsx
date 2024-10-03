@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import Seed from "./seed";
 import { UseAccountResult } from "@starknet-react/core";
+import { renderSeed } from "@/lib/constants";
 
 export function TopPit({
   amount,
@@ -91,16 +91,16 @@ export function TopPit({
               {seeds
                 ?.slice(0, seed_count)
                 .map((seed, seedIndex) => (
-                  <Seed
-                    key={seedIndex}
-                    color={seeds != undefined ? seed.node.color : []}
-                    previousPit={previousSeeds != undefined ? previousSeeds[seedIndex]?.node?.pit_number : 0}
-                    currentPit={seed.node.pit_number}
-                    seed={(pit - 1) * 4 + seed.node.seed_number}
-                    zIndex={seedIndex}
-                    pit_type="top"
-                    shouldAnimate={isAnimating}
-                  />
+                  <div key={seedIndex}>
+                    {renderSeed(
+                      (pit - 1) * 4 + seed.node.seed_number,
+                      seeds != undefined ? seed.node.color : [],
+                      seedIndex,
+                      seed.node.previous,
+                      seed.node.next,
+                      "top"
+                    )}
+                  </div>
                 ))}
             </div>
           )}
@@ -198,16 +198,16 @@ export function BottomPit({
               {seeds
                 ?.slice(0, seed_count)
                 .map((seed, seedIndex) => (
-                  <Seed
-                    key={seedIndex}
-                    color={seeds != undefined ? seed.node.color : []}
-                    previousPit={previousSeeds != undefined ? previousSeeds[seedIndex]?.node?.pit_number : 0}
-                    currentPit={seed.node.pit_number}
-                    seed={(pit - 1) * 4 + seed.node.seed_number}
-                    zIndex={seedIndex}
-                    pit_type="bottom"
-                    shouldAnimate={isAnimating}
-                  />
+                  <div key={seedIndex}>
+                    {renderSeed(
+                      (pit - 1) * 4 + seed.node.seed_number,
+                      seeds != undefined ? seed.node.color : [],
+                      seedIndex,
+                      seed.node.previous,
+                      seed.node.next,
+                      "bottom"
+                    )}
+                  </div>
                 ))}
             </div>
           )}

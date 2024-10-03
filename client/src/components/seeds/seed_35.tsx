@@ -1,4 +1,7 @@
-export default function SeedThirtyFive({ color, zIndex }: { color: string; zIndex: number }) {
+export default function SeedThirtyFive(
+    { color, zIndex, previous, next, pit_type }:
+    { color: string; zIndex: number, previous: number, next: number, pit_type: "top" | "bottom" }
+) {
     return(
         <div
             className={`w-[16px] h-[16px] bg-center bg-cover bg-no-repeat ${

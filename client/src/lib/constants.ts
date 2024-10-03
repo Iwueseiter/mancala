@@ -1,6 +1,55 @@
 import eniola from "../assets/eniola.png";
 import israel from "../assets/israel.png";
 import { gql } from "@apollo/client";
+import SeedOne from "../components/seeds/seed_1";
+import SeedTwo from "../components/seeds/seed_2";
+import SeedThree from "../components/seeds/seed_3";
+import SeedFour from "../components/seeds/seed_4";
+import SeedFive from "../components/seeds/seed_5";
+import SeedSix from "../components/seeds/seed_6";
+import SeedSeven from "../components/seeds/seed_7";
+import SeedEight from "../components/seeds/seed_8";
+import SeedNine from "../components/seeds/seed_9";
+import SeedTen from "../components/seeds/seed_10";
+import SeedEleven from "../components/seeds/seed_11";
+import SeedTwelve from "../components/seeds/seed_12";
+import SeedThirteen from "../components/seeds/seed_13";
+import SeedFourteen from "../components/seeds/seed_14";
+import SeedFifteen from "../components/seeds/seed_15";
+import SeedSixteen from "../components/seeds/seed_16";
+import SeedSeventeen from "../components/seeds/seed_17";
+import SeedEighteen from "../components/seeds/seed_18";
+import SeedNineteen from "../components/seeds/seed_19";
+import SeedTwenty from "../components/seeds/seed_20";
+import SeedTwentyOne from "../components/seeds/seed_21";
+import SeedTwentyTwo from "../components/seeds/seed_22";
+import SeedTwentyThree from "../components/seeds/seed_23";
+import SeedTwentyFour from "../components/seeds/seed_24";
+import SeedTwentyFive from "../components/seeds/seed_25";
+import SeedTwentySix from "../components/seeds/seed_26";
+import SeedTwentySeven from "../components/seeds/seed_27";
+import SeedTwentyEight from "../components/seeds/seed_28";
+import SeedTwentyNine from "../components/seeds/seed_29";
+import SeedThirty from "../components/seeds/seed_30";
+import SeedThirtyOne from "../components/seeds/seed_31";
+import SeedThirtyTwo from "../components/seeds/seed_32";
+import SeedThirtyThree from "../components/seeds/seed_33";
+import SeedThirtyFour from "../components/seeds/seed_34";
+import SeedThirtyFive from "../components/seeds/seed_35";
+import SeedThirtySix from "../components/seeds/seed_36";
+import SeedThirtySeven from "../components/seeds/seed_37";
+import SeedThirtyEight from "../components/seeds/seed_38";
+import SeedThirtyNine from "../components/seeds/seed_39";
+import SeedForty from "../components/seeds/seed_40";
+import SeedFortyOne from "../components/seeds/seed_41";
+import SeedFortyTwo from "../components/seeds/seed_42";
+import SeedFortyThree from "../components/seeds/seed_43";
+import SeedFortyFour from "../components/seeds/seed_44";
+import SeedFortyFive from "../components/seeds/seed_45";
+import SeedFortySix from "../components/seeds/seed_46";
+import SeedFortySeven from "../components/seeds/seed_47";
+import SeedFortyEight from "../components/seeds/seed_48";
+import React from "react";
 
 export const chat = [
   {
@@ -692,3 +741,72 @@ export const MancalaHeaderQuery = gql`
     }
   }
 `;
+
+type SeedProps = {
+  color: string;
+  zIndex: number;
+  previous: number;
+  next: number;
+  pit_type: "top" | "bottom";
+};
+
+type SeedComponent = React.ComponentType<SeedProps>;
+
+export const renderSeed = (seedNumber: number, color: string, zIndex: number, previous: number, next: number, pit_type: "top" | "bottom") => {
+  const SeedComponent = getSeedComponent(seedNumber);
+  return SeedComponent ? React.createElement(SeedComponent, { color, zIndex, previous, next, pit_type }) : null;
+};
+
+export const getSeedComponent = (seedNumber: number): SeedComponent | null => {
+  switch (seedNumber) {
+    case 1: return SeedOne;
+    case 2: return SeedTwo;
+    case 3: return SeedThree;
+    case 4: return SeedFour;
+    case 5: return SeedFive;
+    case 6: return SeedSix;
+    case 7: return SeedSeven;
+    case 8: return SeedEight;
+    case 9: return SeedNine;
+    case 10: return SeedTen;
+    case 11: return SeedEleven;
+    case 12: return SeedTwelve;
+    case 13: return SeedThirteen;
+    case 14: return SeedFourteen;
+    case 15: return SeedFifteen;
+    case 16: return SeedSixteen;
+    case 17: return SeedSeventeen;
+    case 18: return SeedEighteen;
+    case 19: return SeedNineteen;
+    case 20: return SeedTwenty;
+    case 21: return SeedTwentyOne;
+    case 22: return SeedTwentyTwo;
+    case 23: return SeedTwentyThree;
+    case 24: return SeedTwentyFour;
+    case 25: return SeedTwentyFive;
+    case 26: return SeedTwentySix;
+    case 27: return SeedTwentySeven;
+    case 28: return SeedTwentyEight;
+    case 29: return SeedTwentyNine;
+    case 30: return SeedThirty;
+    case 31: return SeedThirtyOne;
+    case 32: return SeedThirtyTwo;
+    case 33: return SeedThirtyThree;
+    case 34: return SeedThirtyFour;
+    case 35: return SeedThirtyFive;
+    case 36: return SeedThirtySix;
+    case 37: return SeedThirtySeven;
+    case 38: return SeedThirtyEight;
+    case 39: return SeedThirtyNine;
+    case 40: return SeedForty;
+    case 41: return SeedFortyOne;
+    case 42: return SeedFortyTwo;
+    case 43: return SeedFortyThree;
+    case 44: return SeedFortyFour;
+    case 45: return SeedFortyFive;
+    case 46: return SeedFortySix;
+    case 47: return SeedFortySeven;
+    case 48: return SeedFortyEight;
+    default: return null;
+  }
+};
