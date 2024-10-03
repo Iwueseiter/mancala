@@ -106,7 +106,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
                       width: opposition_length > 30 ? "8px" : "auto",
                     }}
                   >
-                    <Seed color={seed.node.color} />
+                    <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} />
                   </div>
                 ))}
             </div>
@@ -323,7 +323,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
                       zIndex: index,
                     }}
                   >
-                    <Seed color={seed.node.color} />
+                    <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} />
                   </div>
                 ))}
             </div>

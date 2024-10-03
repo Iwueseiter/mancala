@@ -87,6 +87,9 @@ export function TopPit({
                   <Seed
                     key={seedIndex}
                     color={seeds != undefined ? seed.node.color : []}
+                    previousPit={pit}
+                    currentPit={pit}
+                    seed={(pit - 1) * 4 + seed.node.seed_number}
                   />
                 ))}
             </div>
