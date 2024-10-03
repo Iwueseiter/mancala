@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BottomPit, TopPit } from "@/components/pits";
 import { Dispatch, SetStateAction } from "react";
 import clsx from "clsx";
@@ -25,7 +25,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
   setMoveMessage,
   setTimeRemaining,
 }) => {
-  const { data, startPolling } = useQuery(MancalaSeedQuery, {
+  const { data, startPolling, previousData } = useQuery(MancalaSeedQuery, {
     variables: { gameId: gameId },
   });
   startPolling(1000);
@@ -71,6 +71,10 @@ const GameBoard: React.FC<GameBoardProps> = ({
       )
       .filter((item: any) => item?.node.pit_number === 7)[0]?.node
       ?.seed_count || 0;
+  const [lastMoveTimestamp, setLastMoveTimestamp] = useState(0);
+  const handleMoveComplete = () => {
+    setLastMoveTimestamp(Date.now());
+  };
   return (
     <div className="w-full h-[400px] flex flex-col items-center justify-center mt-24">
       <div className="w-[1170px] h-[400px] flex flex-row items-center justify-between space-x-5 relative bg-[url('./assets/game_board.png')] bg-contain bg-center bg-no-repeat">
@@ -89,8 +93,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
                 opposition_length > 30 && "grid grid-cols-5",
               )}
             >
-              {// involved && data?.mancalaSeedModels.edges.filter((item: any) => item?.node.player === game_players?.mancalaPlayerModels.edges[opponent_position]?.node.address)
-              data?.mancalaSeedModels.edges
+              {data?.mancalaSeedModels.edges
                 .filter(
                   (item: any) =>
                     item?.node.player ===
@@ -106,7 +109,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
                       width: opposition_length > 30 ? "8px" : "auto",
                     }}
                   >
-                    <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} />
+                    <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} zIndex={index} shouldAnimate={false} />
                   </div>
                 ))}
             </div>
@@ -130,7 +133,6 @@ const GameBoard: React.FC<GameBoardProps> = ({
           {/* Player 1 */}
           <div className="h-[175px] w-full flex flex-row justify-center items-center ml-3.5">
             <div className="flex flex-row justify-center flex-1 items-center w-[100px] space-x-5">
-              {/* {involved && Array.from({ length: game_players?.mancalaPlayerModels.edges[opponent_position]?.node?.len_pits }, (_, zero_index) => zero_index + 1).map((_, i) => ( */}
               {Array.from(
                 {
                   length:
@@ -204,6 +206,21 @@ const GameBoard: React.FC<GameBoardProps> = ({
                           .len_pits -
                           i,
                     )}
+                  previousSeeds={previousData?.mancalaSeedModels.edges
+                    .filter(
+                      (item: any) =>
+                        item?.node.player ===
+                        game_players?.mancalaPlayerModels.edges[
+                          opponent_position
+                        ]?.node.address,
+                    )
+                    .filter(
+                      (item: any) =>
+                        item?.node.pit_number ===
+                        game_players?.mancalaPlayerModels.edges[0]?.node
+                          .len_pits -
+                          i,
+                    )}
                   setTimeRemaining={setTimeRemaining}
                   max_block_between_move={parseInt(
                     game_node?.max_block_between_move,
@@ -216,7 +233,6 @@ const GameBoard: React.FC<GameBoardProps> = ({
           {/* Player 2 */}
           <div className="h-[175px] w-full flex flex-row justify-between items-center">
             <div className="flex flex-row justify-center flex-1 space-x-5">
-              {/* {involved && Array.from({ length: game_players?.mancalaPlayerModels.edges[player_position]?.node.len_pits }, (_, zero_index) => zero_index + 1).map((pit_key, i) => ( */}
               {Array.from(
                 {
                   length:
@@ -227,6 +243,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
               ).map((pit_key, i) => (
                 <BottomPit
                   key={i}
+                  onMoveComplete={handleMoveComplete}
                   amount={
                     game_players?.mancalaPitModels.edges
                       .filter(
@@ -270,6 +287,14 @@ const GameBoard: React.FC<GameBoardProps> = ({
                           ?.node.address,
                     )
                     .filter((item: any) => item?.node.pit_number === i + 1)}
+                  previousSeeds={previousData?.mancalaSeedModels.edges
+                      .filter(
+                        (item: any) =>
+                          item?.node.player ===
+                          game_players?.mancalaPlayerModels.edges[player_position]
+                            ?.node.address,
+                      )
+                      .filter((item: any) => item?.node.pit_number === i + 1)}
                   setTimeRemaining={setTimeRemaining}
                   max_block_between_move={parseInt(
                     game_node?.max_block_between_move,
@@ -298,8 +323,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
                 player_length > 30 && "grid grid-cols-4",
               )}
             >
-              {// involved && data?.mancalaSeedModels.edges.filter((item: any) => item?.node.player === game_players?.mancalaPlayerModels.edges[player_position]?.node.address)
-              data?.mancalaSeedModels.edges
+              {data?.mancalaSeedModels.edges
                 .filter(
                   (item: any) =>
                     item?.node.player ===
@@ -323,7 +347,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
                       zIndex: index,
                     }}
                   >
-                    <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} />
+                    <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} zIndex={index} shouldAnimate={false} />
                   </div>
                 ))}
             </div>

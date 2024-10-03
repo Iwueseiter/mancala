@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Seed from "./seed";
 import { UseAccountResult } from "@starknet-react/core";
 
@@ -17,6 +17,7 @@ export function TopPit({
   seed_count,
   seeds,
   message,
+  previousSeeds,
 }: {
   amount: number;
   address: string;
@@ -31,7 +32,10 @@ export function TopPit({
   message: Dispatch<SetStateAction<string | undefined>>;
   setTimeRemaining: Dispatch<SetStateAction<number>>;
   max_block_between_move: number;
+  previousSeeds: any[];
 }) {
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const handleMove = async () => {
     if (
       address === userAccount?.account?.address &&
@@ -39,8 +43,10 @@ export function TopPit({
       winner === "0x0"
     ) {
       message(undefined);
+      setIsAnimating(true);
       const res = await system.move(userAccount?.account, game_id, pit);
       setTimeRemaining(max_block_between_move);
+      setIsAnimating(false);
     } else {
       if (address !== userAccount?.account?.address) {
         message("Not your pit");
@@ -55,6 +61,7 @@ export function TopPit({
       }
     }
   };
+
   return (
     <div
       className={
@@ -87,9 +94,12 @@ export function TopPit({
                   <Seed
                     key={seedIndex}
                     color={seeds != undefined ? seed.node.color : []}
-                    previousPit={pit}
-                    currentPit={pit}
+                    previousPit={previousSeeds != undefined ? previousSeeds[seedIndex]?.node?.pit_number : 0}
+                    currentPit={seed.node.pit_number}
                     seed={(pit - 1) * 4 + seed.node.seed_number}
+                    zIndex={seedIndex}
+                    pit_type="top"
+                    shouldAnimate={isAnimating}
                   />
                 ))}
             </div>
@@ -114,6 +124,8 @@ export function BottomPit({
   seed_count,
   seeds,
   message,
+  previousSeeds,
+  onMoveComplete,
 }: {
   amount: number;
   address: string;
@@ -128,17 +140,23 @@ export function BottomPit({
   message: Dispatch<SetStateAction<string | undefined>>;
   setTimeRemaining: Dispatch<SetStateAction<number>>;
   max_block_between_move: number;
+  previousSeeds: any[];
+  onMoveComplete: () => void;
 }) {
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const handleMove = async () => {
-    message(undefined);
     if (
       address === userAccount?.account?.address &&
       status === "InProgress" &&
       winner === "0x0"
     ) {
       message(undefined);
+      setIsAnimating(true);
       const res = await system.move(userAccount?.account, game_id, pit);
       setTimeRemaining(max_block_between_move);
+      setIsAnimating(false);
+      onMoveComplete();
     } else {
       if (address !== userAccount?.account?.address) {
         message("Not your pit");
@@ -153,6 +171,7 @@ export function BottomPit({
       }
     }
   };
+
   return (
     <div
       className={
@@ -182,6 +201,12 @@ export function BottomPit({
                   <Seed
                     key={seedIndex}
                     color={seeds != undefined ? seed.node.color : []}
+                    previousPit={previousSeeds != undefined ? previousSeeds[seedIndex]?.node?.pit_number : 0}
+                    currentPit={seed.node.pit_number}
+                    seed={(pit - 1) * 4 + seed.node.seed_number}
+                    zIndex={seedIndex}
+                    pit_type="bottom"
+                    shouldAnimate={isAnimating}
                   />
                 ))}
             </div>
