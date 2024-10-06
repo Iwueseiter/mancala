@@ -377,10 +377,6 @@ fn test_end_game() {
     assert(p1_score == 23, 'Player 1 score is wrong');
     assert(p2_score == 25, 'Player 2 score is wrong');
 
-    // Add these lines before the assertions
-    let p1_store = store.get_pit(game_id, setup::OWNER(), 7);
-    let p2_store = store.get_pit(game_id, ANYONE, 7);
-
     // Check that there is the correct amount of seeds in the store
     let mut p1_index = 1;
     loop {
@@ -393,6 +389,7 @@ fn test_end_game() {
             SeedColor::Blue => 'Blue',
             SeedColor::Green => 'Green',
         };
+        println!("P1 seed {}: color = {}", p1_index, color_str);
         p1_index += 1;
     };
 
