@@ -384,12 +384,11 @@ fn test_end_game() {
             break;
         }
         let p1_seed = store.get_seed(game_id, setup::OWNER(), 7, p1_index);
-        let color_str = match p1_seed.color {
+        let _ = match p1_seed.color {
             SeedColor::None => 'None',
             SeedColor::Blue => 'Blue',
             SeedColor::Green => 'Green',
         };
-        println!("P1 seed {}: color = {}", p1_index, color_str);
         p1_index += 1;
     };
 
@@ -400,7 +399,7 @@ fn test_end_game() {
             break;
         }
         let p2_seed = store.get_seed(game_id, ANYONE, 7, p2_index);
-        let color_str = match p2_seed.color {
+        let _ = match p2_seed.color {
             SeedColor::None => 'None',
             SeedColor::Blue => 'Blue',
             SeedColor::Green => 'Green',
