@@ -180,6 +180,7 @@ fn restart_player_pits(world: IWorldDispatcher, player: @Player, seed_color: See
     let mut store: Store = StoreTrait::new(world);
 
     let mut idx = 1;
+    let mut seed_id = 1;
     loop {
         if idx > *player.len_pits {
             break;
@@ -196,11 +197,13 @@ fn restart_player_pits(world: IWorldDispatcher, player: @Player, seed_color: See
                 player: *player.address,
                 pit_number: idx,
                 seed_number: seeds_set,
-                color: seed_color
+                color: seed_color,
+                seed_id: seed_id,  // Assign the unique seed ID
             };
             store.set_seed(seed);
             pit.seed_count += 1;
             seeds_set += 1;
+            seed_id += 1;  // Increment the seed ID for the next seed
         };
         store.set_pit(pit);
         idx += 1;
