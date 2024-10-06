@@ -108,3 +108,40 @@ export function getPlayer(data: any[] | undefined, address: string) {
 
   return playerStats;
 }
+
+// export function processMancalaSeeds(seeds: any[]): any[] {
+//   // Sort seeds by player, pit_number, and original seed_number
+//   const sortedSeeds = [...seeds].sort((a, b) => {
+//     if (a.node.player !== b.node.player) {
+//       return a.node.player.localeCompare(b.node.player);
+//     }
+//     if (a.node.pit_number !== b.node.pit_number) {
+//       return a.node.pit_number - b.node.pit_number;
+//     }
+//     return a.node.seed_number - b.node.seed_number;
+//   });
+
+//   // Create a new array to store the modified seeds
+//   const modifiedSeeds = sortedSeeds.map((seedEdge, index) => {
+//     const newSeedEdge = { ...seedEdge };
+    
+//     // Preserve the original seed_number as seed_id
+//     newSeedEdge.node = {
+//       ...newSeedEdge.node,
+//       seed_id: newSeedEdge.node.seed_number,
+//       seed_number: index + 1
+//     };
+
+//     return newSeedEdge;
+//   });
+
+//   return modifiedSeeds.slice(0, 48);
+// }
+
+export const findSeed = (data: any, number: number) => data?.mancalaSeedModels.edges?.filter((seed: any) => seed?.node.seed_number === number)[0];
+
+export function findSeedsByPit(seeds: any[], player: string, pitNumber: number): any[] {
+  return seeds?.filter(seed => 
+    seed.node.player === player && seed.node.pit_number === pitNumber
+  );
+}

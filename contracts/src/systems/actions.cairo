@@ -43,7 +43,7 @@ mod actions {
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
         fn initialize_game_counter(self: @ContractState) {
-            self.playable.initialize_game_counter(self.world())
+            self.playable.initialize_game_counter(self.world());
         }
 
         fn new_game(self: @ContractState) -> MancalaBoard {

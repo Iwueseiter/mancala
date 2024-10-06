@@ -11,7 +11,7 @@ mod PlayableComponent {
     use mancala::models::player::{Player, PlayerTrait};
     use mancala::models::mancala_board::{MancalaBoard, MancalaBoardTrait};
     use mancala::models::game_counter::{GameCounter, GameCounterTrait};
-    use mancala::models::seed::SeedColor;
+    use mancala::models::seed::{Seed, SeedColor};
     use mancala::utils::board::{
         get_player_seeds, distribute_seeds, capture_seeds, capture_remaining_seeds,
         restart_player_pits
@@ -22,6 +22,7 @@ mod PlayableComponent {
         const GAME_PLAYER_TWO_NOT_SET: felt252 = 'Game: player two not set';
         const PLAYER_NOT_IN_GAME: felt252 = 'Not a game player';
         const PLAYER_DID_NOT_REQUEST_RESTART: felt252 = 'Player did not request restart';
+        const GAME_COUNTER_INITIALIZED: felt252 = 'Game already initialized';
     }
 
     #[storage]
@@ -35,30 +36,13 @@ mod PlayableComponent {
     impl InternalImpl<
         TContractState, +HasComponent<TContractState>
     > of InternalTrait<TContractState> {
-        /// Initializes the game counter
-        ///
-        /// # Arguments
-        /// * `self` - Reference to the component state
-        /// * `world` - The World dispatcher
-        ///
-        /// # Effects
-        /// * Sets up the initial game counter in the world state
         fn initialize_game_counter(self: @ComponentState<TContractState>, world: IWorldDispatcher) {
-            // [Setup] Datastore
             let store: Store = StoreTrait::new(world);
-
-            let current_game_counter = store.get_game_counter(1);
-            assert(current_game_counter.count == 0, 'Counter already initialized');
-
-            // [Effect] Create GameCounter
-            let mut game_counter = GameCounterTrait::new();
-
-            // [Effect] GameCounter increment
+            let mut game_counter = get!(world, 1, GameCounter);
+            assert(game_counter.count == 0, errors::GAME_COUNTER_INITIALIZED);
             game_counter.increment();
-
             store.set_game_counter(game_counter);
         }
-
         /// Creates a new game
         ///
         /// # Arguments

@@ -56,7 +56,7 @@ export default function GameHistory({
   // })
 
   const data = games?.map((data: any, index: number) => {
-    console.log(data);
+    // console.log(data);
     return {
       challenger: data.node.player_one,
       challenged: data.node.player_two,

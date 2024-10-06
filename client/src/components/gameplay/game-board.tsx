@@ -5,6 +5,10 @@ import clsx from "clsx";
 import { useQuery } from "@apollo/client";
 import { MancalaSeedQuery } from "@/lib/constants";
 import Seed from "../seed";
+import { PitOne } from "../pits/pit_1";
+import { PitSeven } from "../pits/pit_7";
+import { findSeed } from "@/lib/utils";
+import SeedOne from "../seeds/seed_1";
 
 interface GameBoardProps {
   game_players: any; // Replace 'any' with the correct type from your GraphQL query
@@ -71,10 +75,30 @@ const GameBoard: React.FC<GameBoardProps> = ({
       )
       .filter((item: any) => item?.node.pit_number === 7)[0]?.node
       ?.seed_count || 0;
-  const [lastMoveTimestamp, setLastMoveTimestamp] = useState(0);
-  const handleMoveComplete = () => {
-    setLastMoveTimestamp(Date.now());
-  };
+      
+      const handleMove = async () => {
+        // if (
+        //   address === userAccount?.account?.address &&
+        //   status === "InProgress" &&
+        //   winner === "0x0"
+        // ) {
+        //   message(undefined);
+        //   await system.move(userAccount?.account, game_id, pit);
+        //   setTimeRemaining(max_block_between_move);
+        // } else {
+        //   if (address !== userAccount?.account?.address) {
+        //     message("Not your pit");
+        //   } else if (status !== "InProgress") {
+        //     message("Game over");
+        //   } else {
+        //     if (winner === userAccount?.account?.address) {
+        //       message("You won");
+        //     } else {
+        //       message("You lost");
+        //     }
+        //   }
+        // }
+      }
   return (
     <div className="w-full h-[400px] flex flex-col items-center justify-center mt-24">
       <div className="w-[1170px] h-[400px] flex flex-row items-center justify-between space-x-5 relative bg-[url('./assets/game_board.png')] bg-contain bg-center bg-no-repeat">
@@ -109,7 +133,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
                       width: opposition_length > 30 ? "8px" : "auto",
                     }}
                   >
-                    <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} zIndex={index} shouldAnimate={false} />
+                    {/* <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} zIndex={index} shouldAnimate={false} /> */}
                   </div>
                 ))}
             </div>
@@ -133,7 +157,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
           {/* Player 1 */}
           <div className="h-[175px] w-full flex flex-row justify-center items-center ml-3.5">
             <div className="flex flex-row justify-center flex-1 items-center w-[100px] space-x-5">
-              {Array.from(
+              {/* {Array.from(
                 {
                   length:
                     game_players?.mancalaPlayerModels.edges[opponent_position]
@@ -227,81 +251,40 @@ const GameBoard: React.FC<GameBoardProps> = ({
                     16,
                   )}
                 />
-              ))}
+              ))} */}
             </div>
           </div>
           {/* Player 2 */}
           <div className="h-[175px] w-full flex flex-row justify-between items-center">
             <div className="flex flex-row justify-center flex-1 space-x-5">
-              {Array.from(
-                {
-                  length:
-                    game_players?.mancalaPlayerModels.edges[player_position]
-                      ?.node.len_pits,
-                },
-                (_, zero_index) => zero_index + 1,
-              ).map((pit_key, i) => (
-                <BottomPit
-                  key={i}
-                  onMoveComplete={handleMoveComplete}
-                  amount={
-                    game_players?.mancalaPitModels.edges
-                      .filter(
-                        (item: any) =>
-                          item?.node.player ===
-                          game_players?.mancalaPlayerModels.edges[
-                            player_position
-                          ]?.node.address,
-                      )
-                      .filter((item: any) => item?.node.pit_number === i + 1)[0]
-                      ?.node?.seed_count
-                  }
-                  address={
-                    game_players?.mancalaPlayerModels.edges[player_position]
-                      ?.node.address
-                  }
-                  pit={pit_key}
-                  userAccount={account}
-                  system={system}
-                  game_id={gameId}
-                  message={setMoveMessage}
-                  status={game_node?.status}
-                  winner={game_node?.winner}
-                  seed_count={
-                    game_players?.mancalaPitModels.edges
-                      .filter(
-                        (item: any) =>
-                          item?.node.player ===
-                          game_players?.mancalaPlayerModels.edges[
-                            player_position
-                          ]?.node.address,
-                      )
-                      .filter((item: any) => item?.node.pit_number === i + 1)[0]
-                      ?.node?.seed_count
-                  }
-                  seeds={data?.mancalaSeedModels.edges
-                    .filter(
-                      (item: any) =>
-                        item?.node.player ===
-                        game_players?.mancalaPlayerModels.edges[player_position]
-                          ?.node.address,
-                    )
-                    .filter((item: any) => item?.node.pit_number === i + 1)}
-                  previousSeeds={previousData?.mancalaSeedModels.edges
-                      .filter(
-                        (item: any) =>
-                          item?.node.player ===
-                          game_players?.mancalaPlayerModels.edges[player_position]
-                            ?.node.address,
-                      )
-                      .filter((item: any) => item?.node.pit_number === i + 1)}
-                  setTimeRemaining={setTimeRemaining}
-                  max_block_between_move={parseInt(
-                    game_node?.max_block_between_move,
-                    16,
-                  )}
-                />
-              ))}
+              <div className="flex-col h-[125px] w-full flex justify-between items-center space-y-4 -mt-12 ml-2.5" onClick={handleMove}>
+                <div className="flex flex-col items-center justify-center flex-1 w-full h-full">
+                  <div className= "w-[60px] h-[60px] flex flex-col items-center justify-center hover:cursor-pointer ml-2">
+                      <div className={"grid grid-cols-4"}>
+                        <Seed 
+                          color={findSeed(data, 1)?.node.color} 
+                          zIndex={1}
+                          pit={findSeed(data, 1)?.node.pit_number} 
+                        />
+                        <Seed 
+                          color={findSeed(data, 2)?.node.color} 
+                          zIndex={2}
+                          pit={findSeed(data, 2)?.node.pit_number} 
+                        />
+                        <Seed 
+                          color={findSeed(data, 3)?.node.color} 
+                          zIndex={3}
+                          pit={findSeed(data, 3)?.node.pit_number} 
+                        />
+                        <Seed 
+                          color={findSeed(data, 4)?.node.color} 
+                          zIndex={4}
+                          pit={findSeed(data, 4)?.node.pit_number} 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
         </div>
@@ -347,7 +330,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
                       zIndex: index,
                     }}
                   >
-                    <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} zIndex={index} shouldAnimate={false} />
+                    {/* <Seed color={seed.node.color} currentPit={0} previousPit={0} seed={0} zIndex={index} shouldAnimate={false} /> */}
                   </div>
                 ))}
             </div>

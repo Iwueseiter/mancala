@@ -1,9 +1,27 @@
+import { motion } from "framer-motion";
+import { useEffect } from "react";
+
 export default function SeedFour(
-    { color, zIndex, previous, next, pit_type }:
-    { color: string; zIndex: number, previous: number, next: number, pit_type: "top" | "bottom" }
+    { color, zIndex, pit }:
+    { color: string; zIndex: number, pit: number }
 ) {
+    const x = pit === 1 ? 0 : 
+    pit === 2 ? 16 :
+    pit === 3 ? 32 :
+    pit === 4 ? 48 :
+    pit === 5 ? 64 :
+    pit === 6 ? 80 : 96;
+    useEffect(() => {}, [pit])
     return(
-        <div
+        <motion.div
+            initial={{
+                x: 0,
+                y: 0,
+            }}
+            animate={{
+                x,
+                y: pit,
+            }}
             className={`w-[16px] h-[16px] bg-center bg-cover bg-no-repeat ${
                 color === "Green" ? "bg-[url('./assets/green-seed.png')]" : "bg-[url('./assets/purple-seed.png')]"
             }`}
